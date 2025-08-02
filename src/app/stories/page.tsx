@@ -1,5 +1,14 @@
+import { Button } from "@/components/ui/button";
 import client from "../lib/wix";
-
+import {
+    Card,
+    CardAction,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
 export default async function Home() {
 
     if (!process.env.WIX_CLIENT_ID) {
@@ -14,16 +23,23 @@ export default async function Home() {
     return (
         <div className="grid grid-rows-[20px_1fr_20px] items-center">
             <h1 className="text-2xl font-bold">Stories</h1>
-
             <div className="grid grid-cols-3 gap-4">
-                {stories.map((story, idx) => (
-                    <div key={story.id ?? idx}>
-                        <h2>{story.title}</h2>
-                        <p>{story.author}</p>
-                    </div>
+                {stories.map((story) => (
+                    <Card key={story?._id}>
+                        <CardHeader>
+                            <CardTitle>{story?.title}</CardTitle>
+                            <CardDescription>Card Description</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <p>{story?.author}</p>
+                        </CardContent>
+                        <CardFooter>
+                            <p>Card Footer</p>
+                        </CardFooter>
+                    </Card>
                 ))}
             </div>
-
+            <Button>Add Stories</Button>
         </div>
     );
 }
