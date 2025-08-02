@@ -38,7 +38,7 @@ export default async function Home() {
                         <CardFooter>
 
                             <Button asChild>
-                                <Link href={'/stories/${stories?._id}'}>Read Reviews</Link>
+                                <Link href={`/stories/${story._id}`}>Read Reviews</Link>
                             </Button>
                         </CardFooter>
                     </Card>
