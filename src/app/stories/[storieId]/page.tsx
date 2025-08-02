@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { AlertTriangle } from "lucide-react"; // If using lucide-react for icons (optional)
 import client from "../../lib/wix";
 
 export default async function StoryPage(props: { params: { storieId: string } }) {
@@ -24,8 +25,8 @@ export default async function StoryPage(props: { params: { storieId: string } })
     const story = result.items[0];
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-50 to-gray-100 px-4 py-10">
-            <div className="max-w-2xl w-full bg-white shadow-2xl rounded-2xl overflow-hidden">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-green-50 to-gray-100 px-4 py-10">
+            <div className="max-w-2xl w-full bg-white shadow-2xl rounded-2xl overflow-hidden mb-10">
                 <div className="flex flex-col md:flex-row">
                     {/* COVER IMAGE */}
                     <div className="flex-shrink-0 bg-gray-100 flex items-center justify-center md:w-1/2">
@@ -67,6 +68,16 @@ export default async function StoryPage(props: { params: { storieId: string } })
                             <hr className="my-4" />
                             <p className="text-gray-800 leading-relaxed text-lg">{story.description}</p>
                         </div>
+                    </div>
+                </div>
+            </div>
+            {/* Placeholder for reviews */}
+            <div className="max-w-2xl w-full mt-2">
+                <div className="flex items-center gap-3 bg-yellow-100 border-l-4 border-yellow-400 text-yellow-900 px-6 py-5 rounded shadow mb-3">
+                    {/* Alert triangle icon (lucide-react or use an emoji if you want to avoid extra libs) */}
+                    <AlertTriangle className="w-6 h-6 text-yellow-400" />
+                    <div>
+                        <span className="font-semibold">Reviews section</span> – <span className="italic">working in progress</span> <span role="img" aria-label="warning">⚠️</span>
                     </div>
                 </div>
             </div>
