@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import client from "../lib/wix";
 import {
@@ -34,7 +36,10 @@ export default async function Home() {
                             <p>{story?.author}</p>
                         </CardContent>
                         <CardFooter>
-                            <p>Card Footer</p>
+
+                            <Button asChild>
+                                <Link href={'/stories/${stories?._id}'}>Read Reviews</Link>
+                            </Button>
                         </CardFooter>
                     </Card>
                 ))}
