@@ -70,6 +70,44 @@ export default async function StoryPage(props: { params: { storieId: string } })
                         </div>
                     </div>
                 </div>
+            </div> 
+            <div>
+                <Card>
+  <CardHeader>
+    <CardTitle>Stories</CardTitle>
+  </CardHeader>
+
+  <CardContent>
+    <div className="space-y-6">
+      {stories?.map((story) => (
+        <div key={story?._id} className="border-b pb-4">
+          <div className="flex justify-between items-center">
+            <p className="font-semibold">{story?.title}</p>
+            <p className="text-sm text-muted-foreground">by {story?.author}</p>
+          </div>
+
+          {story?.rating && (
+            <div className="flex mt-1">
+              {[...Array(story.rating)].map((_, i) => (
+                <StarIcon
+                  key={i}
+                  className="w-5 h-5 fill-yellow-400 text-yellow-400"
+                />
+              ))}
+            </div>
+          )}
+
+          <p className="mt-2 text-sm text-gray-700 line-clamp-3">
+            {story?.content}
+          </p>
+        </div>
+      ))}
+    </div>
+
+    {/* Optional story submission form */}
+  </CardContent>
+</Card>
+
             </div>
             {/* Placeholder for reviews */}
             <div className="max-w-2xl w-full mt-2">
