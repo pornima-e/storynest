@@ -1,15 +1,31 @@
 import Image from "next/image";
-import { AlertTriangle } from "lucide-react"; // Optional, not used here, but you can use for warnings
+import { AlertTriangle } from "lucide-react";
 import client from "../../lib/wix";
 import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { StarIcon } from "@heroicons/react/24/solid";
-// import * as textarea from "@/components/ui/textarea"; // Not used in this snippet
 import { PostReviewForm } from "./post-review-form";
+
+// --- Hash function ---
+function hashString(str: string): number {
+  let hash = 5381;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) + hash) + str.charCodeAt(i);
+  }
+  return Math.abs(hash);
+}
+
+// --- Turn hash into HSL color ---
+function colorFromTitle(title: string): string {
+  const hash = hashString(title);
+  const hue = hash % 360;
+  const sat = 65 + (hash % 10);    // Slightly lower saturation
+  const light = 86 + (hash % 7);   // Much lighter!
+  return `hsl(${hue}, ${sat}%, ${light}%)`;
+}
 
 
 export default async function StoryPage(props: { params: { storieId: string } }) {
-  // Await params before using it (Next.js 15+ dynamic API!)
   const { params } = props;
   const awaitedParams = await params;
   const storieId = awaitedParams?.storieId;
@@ -30,13 +46,19 @@ export default async function StoryPage(props: { params: { storieId: string } })
 
   const reviews = await client.items
     .query("REVIEWS")
-    .eq("storyId", storieId) // Query reviews for this story by 'storyId' - foreign key
+    .eq("storyId", storieId)
     .find();
 
   const story = result.items[0];
+  const bgColor = colorFromTitle(story.title || "default");
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-green-50 to-gray-100 px-4 py-10">
+    <div
+      className="min-h-screen flex flex-col items-center justify-center px-4 py-10"
+      style={{
+        background: `linear-gradient(to bottom, ${bgColor}, #f3f4f6 85%)`
+      }}
+    >
       {/* Wider Main Story Card */}
       <div className="max-w-4xl w-full bg-white shadow-2xl rounded-2xl overflow-hidden mb-10">
         <div className="flex flex-col md:flex-row">
@@ -65,7 +87,6 @@ export default async function StoryPage(props: { params: { storieId: string } })
               <p className="text-lg text-gray-700 mb-1">
                 <span className="font-semibold">By</span> {story.author}
               </p>
-              {/* Publication Date */}
               <p className="text-sm text-gray-500 mb-4">
                 Published on{" "}
                 <span className="font-semibold">
@@ -113,7 +134,6 @@ export default async function StoryPage(props: { params: { storieId: string } })
               <span className="font-bold">Reviews</span>
             </CardTitle>
           </CardHeader>
-
           <CardContent>
             <div className="space-y-4">
               {(reviews.items ?? []).length === 0 ? (
