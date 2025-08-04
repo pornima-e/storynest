@@ -1,7 +1,5 @@
 import Image from "next/image";
-import { AlertTriangle } from "lucide-react";
 import client from "../../lib/wix";
-import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { PostReviewForm } from "./post-review-form";
@@ -15,34 +13,24 @@ function hashString(str: string): number {
   return Math.abs(hash);
 }
 
-// --- Turn hash into HSL color ---
+// --- Turn hash into LIGHER HSL color ---
 function colorFromTitle(title: string): string {
   const hash = hashString(title);
   const hue = hash % 360;
-  const sat = 65 + (hash % 10);    // Slightly lower saturation
-  const light = 86 + (hash % 7);   // Much lighter!
+  const sat = 65 + (hash % 10);
+  const light = 86 + (hash % 7);
   return `hsl(${hue}, ${sat}%, ${light}%)`;
 }
 
+export default async function Page({ params }: { params: { storieId: string } }) {
+  const { storieId } = await params;  // ✅ MUST await!
+  if (!storieId) return <div className="text-red-500">Missing story ID.</div>;
 
-export default async function StoryPage(props: { params: { storieId: string } }) {
-  const { params } = props;
-  const awaitedParams = await params;
-  const storieId = awaitedParams?.storieId;
-
-  if (!storieId) {
-    return <div className="text-red-500">Missing story ID.</div>;
-  }
-
-  // Query for the story by _id
   const result = await client.items
     .query("Stories")
     .eq("_id", storieId)
     .find();
-
-  if (!result.items?.length) {
-    return <div className="text-gray-500">Story not found.</div>;
-  }
+  if (!result.items?.length) return <div className="text-gray-500">Story not found.</div>;
 
   const reviews = await client.items
     .query("REVIEWS")
@@ -125,6 +113,23 @@ export default async function StoryPage(props: { params: { storieId: string } })
             </div>
           </CardContent>
         </Card>
+
+        {/* URL Card */}
+        {story.url && (
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle>
+                <span role="img" aria-label="link" className="mr-2">🔗</span>
+                <span className="font-bold">Story URL</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="p-2 rounded bg-gray-100 text-gray-700 break-all select-all">
+                {story.url}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Reviews Card */}
         <Card className="w-full">
