@@ -27,10 +27,9 @@ export default async function StoryPage(props: { params: { storieId: string } })
     return <div className="text-gray-500">Story not found.</div>;
   }
 
-  // Query reviews for this story by 'storyId' (adjust if your foreign key is different)
   const reviews = await client.items
     .query("REVIEWS")
-    .eq("storyId", storieId)
+    .eq("storyId", storieId) // Query reviews for this story by 'storyId' - foreign key
     .find();
 
   const story = result.items[0];
@@ -96,8 +95,6 @@ export default async function StoryPage(props: { params: { storieId: string } })
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-
-              {/* CONTENT */}
               <p className="mt-2 text-sm text-gray-700 line-clamp-3">
                 {story.content && story.content.trim().length > 0
                   ? story.content
