@@ -40,6 +40,8 @@ export default async function Page({ params }: { params: { storieId: string } })
   const story = result.items[0];
   const bgColor = colorFromTitle(story.title || "default");
 
+  console.log("Rendering PostReviewForm with storyId:", story?._id);
+
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center px-4 py-10"
