@@ -52,7 +52,7 @@ export default async function Home() {
                                         <>
                                             <br />
                                             <span className="text-xs text-gray-500">
-                                                {new Date(story.publicationDate).toLocaleDateString(undefined, {
+                                                 {new Date(story.publicationDate).toLocaleDateString(undefined, {
                                                     year: "numeric",
                                                     month: "long",
                                                     day: "numeric",

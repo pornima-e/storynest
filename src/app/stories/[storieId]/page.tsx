@@ -4,6 +4,8 @@ import client from "../../lib/wix";
 import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"; // adjust path as needed
 import { StarIcon } from "@heroicons/react/24/solid";
+import * as textarea from "@/components/ui/textarea";
+import { PostReviewForm } from "./post-review-form";
 
 export default async function StoryPage(props: { params: { storieId: string } }) {
   // Await params before using it (Next.js 15+ dynamic API!)
@@ -136,12 +138,12 @@ export default async function StoryPage(props: { params: { storieId: string } })
 
               </div>
             </div>
+            <PostReviewForm storyId= {story?._id } />
           </CardContent>
         </Card>
 
-      </div>
-
-      {/* Placeholder for reviews */}
+      </div>  
+        {/* Placeholder for reviews * /}
       <div className="max-w-2xl w-full mt-2">
         <div className="flex items-center gap-3 bg-yellow-100 border-l-4 border-yellow-400 text-yellow-900 px-6 py-5 rounded shadow mb-3">
           {/* Alert triangle icon (lucide-react or use an emoji if you want to avoid extra libs) */}
@@ -150,7 +152,5 @@ export default async function StoryPage(props: { params: { storieId: string } })
             <span className="font-semibold">Reviews section</span> – <span className="italic">working in progress</span> <span role="img" aria-label="warning">⚠️</span>
           </div>
         </div>
-      </div>
-    </div>
   );
 }
