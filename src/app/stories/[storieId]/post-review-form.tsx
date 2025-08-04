@@ -19,27 +19,35 @@ export function PostReviewForm({ storyId }: { storyId: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
+  // Main form
   return (
     <form
       onSubmit={async (e) => {
         e.preventDefault();
         setIsLoading(true);
 
-       try {
-      await getClient().items.insert("Reviews", {
-        ...newReview, 
-        storyId: storyId,
-      });
+        try {
+          // INSERT: field names must exactly match Wix database!
+          await getClient().items.insert("REVIEWS", {
+            Rating: newReview.rating,
+            Name: newReview.name,
+            Review: newReview.review,
+            StoryId: storyId,
+          });
 
           setNewReview(initialReview);
           toast({
             title: "Your review has been posted",
             description: "Thank you for your feedback!",
           });
-        } catch (error) {
+        } catch (error: any) {
+          // Detailed error log
+          console.error("Insert error:", error);
           toast({
             title: "Error",
-            description: "Something went wrong",
+            description: (error && error.message)
+              ? error.message
+              : "Something went wrong",
             variant: "destructive",
           });
         } finally {
