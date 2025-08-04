@@ -1,91 +1,78 @@
 "use client";
 
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { getClient } from "../../lib/wix-client";
 
-const initialReview = {
-  name: "",
-  rating: 5,
-  review: "",
-};
 
 export function PostReviewForm({ storyId }: { storyId: string }) {
-  const [newReview, setNewReview] = useState(initialReview);
+  const [name, setName] = useState("");
+  const [rating, setRating] = useState(5);
+  const [review, setReview] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  // Main form
+  // You can call a backend API route, or use an SDK/JS API as available
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsLoading(true);
+    const toInsert = {
+      Rating: rating,
+      Name: name,
+      Review: review,
+      StoryId: storyId,
+    };
+
+    // Replace this with your actual client/SDK or API endpoint
+    try {
+      const item = await getClient().items.insert("REVIEWS", toInsert);
+      setName(""); setRating(5); setReview("");
+      toast({
+        title: "Your review has been posted",
+        description: "Thank you for your feedback!",
+      });
+      console.log("Inserted review:", item);
+    } catch (err) {
+      console.error("Insert error:", err);
+      toast({
+        title: "Error",
+        description: (err as Error).message || "Something went wrong",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
-    <form
-      onSubmit={async (e) => {
-        e.preventDefault();
-        setIsLoading(true);
-
-        try {
-          // INSERT: field names must exactly match Wix database!
-          await getClient().items.insert("REVIEWS", {
-            Rating: newReview.rating,
-            Name: newReview.name,
-            Review: newReview.review,
-            StoryId: storyId,
-          });
-
-          setNewReview(initialReview);
-          toast({
-            title: "Your review has been posted",
-            description: "Thank you for your feedback!",
-          });
-        } catch (error: any) {
-          // Detailed error log
-          console.error("Insert error:", error);
-          toast({
-            title: "Error",
-            description: (error && error.message)
-              ? error.message
-              : "Something went wrong",
-            variant: "destructive",
-          });
-        } finally {
-          setIsLoading(false);
-        }
-      }}
-      className="mt-6 space-y-4"
-    >
+    <form onSubmit={handleSubmit} className="mt-6 space-y-4">
       <Input
         placeholder="Your name"
-        value={newReview.name}
-        onChange={(e) => setNewReview({ ...newReview, name: e.target.value })}
+        value={name}
+        onChange={e => setName(e.target.value)}
         required
       />
       <div className="flex items-center space-x-2">
-        <label htmlFor="rating" className="text-sm font-medium">
-          Rating:
-        </label>
+        <label htmlFor="rating" className="text-sm font-medium">Rating:</label>
         <Input
           id="rating"
           type="number"
           min="1"
           max="5"
-          value={newReview.rating}
-          onChange={(e) =>
-            setNewReview({
-              ...newReview,
-              rating: parseInt(e.target.value),
-            })
-          }
+          value={rating}
+          onChange={e => setRating(parseInt(e.target.value))}
           required
           className="w-20"
         />
       </div>
       <Textarea
         placeholder="Write your review here..."
-        value={newReview.review}
-        onChange={(e) => setNewReview({ ...newReview, review: e.target.value })}
+        value={review}
+        onChange={e => setReview(e.target.value)}
         required
       />
       <Button
