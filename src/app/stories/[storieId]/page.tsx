@@ -1,10 +1,10 @@
 import Image from "next/image";
-import { AlertTriangle } from "lucide-react"; // If using lucide-react for icons (optional)
+import { AlertTriangle } from "lucide-react"; // Optional, not used here, but you can use for warnings
 import client from "../../lib/wix";
 import React from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"; // adjust path as needed
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { StarIcon } from "@heroicons/react/24/solid";
-import * as textarea from "@/components/ui/textarea";
+// import * as textarea from "@/components/ui/textarea"; // Not used in this snippet
 import { PostReviewForm } from "./post-review-form";
 
 export default async function StoryPage(props: { params: { storieId: string } }) {
@@ -27,11 +27,18 @@ export default async function StoryPage(props: { params: { storieId: string } })
     return <div className="text-gray-500">Story not found.</div>;
   }
 
+  // Query reviews for this story by 'storyId' (adjust if your foreign key is different)
+  const reviews = await client.items
+    .query("REVIEWS")
+    .eq("storyId", storieId)
+    .find();
+
   const story = result.items[0];
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-green-50 to-gray-100 px-4 py-10">
-      <div className="max-w-2xl w-full bg-white shadow-2xl rounded-2xl overflow-hidden mb-10">
+      {/* Wider Main Story Card */}
+      <div className="max-w-4xl w-full bg-white shadow-2xl rounded-2xl overflow-hidden mb-10">
         <div className="flex flex-col md:flex-row">
           {/* COVER IMAGE */}
           <div className="flex-shrink-0 bg-gray-100 flex items-center justify-center md:w-1/2">
@@ -50,6 +57,7 @@ export default async function StoryPage(props: { params: { storieId: string } })
               </div>
             )}
           </div>
+
           {/* STORY INFO */}
           <div className="flex-1 p-8 flex flex-col justify-between">
             <div>
@@ -77,28 +85,17 @@ export default async function StoryPage(props: { params: { storieId: string } })
         </div>
       </div>
 
-      <div className="space-y-8">
-
+      <div className="max-w-4xl w-full space-y-8">
         {/* Story Content Card */}
-        <Card>
+        <Card className="w-full">
           <CardHeader>
-            <CardTitle>Story Details</CardTitle>
+            <CardTitle>
+              <span role="img" aria-label="book" className="mr-2">📖</span>
+              <span className="font-bold">Story Details</span>
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {/* RATING */}
-              {(story.rating && story.rating > 0) ? (
-                <div className="flex mt-1">
-                  {[...Array(story.rating)].map((_, i) => (
-                    <StarIcon
-                      key={i}
-                      className="w-5 h-5 fill-yellow-400 text-yellow-400"
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className="text-sm text-gray-400 italic mt-1">Rating is empty</div>
-              )}
 
               {/* CONTENT */}
               <p className="mt-2 text-sm text-gray-700 line-clamp-3">
@@ -111,46 +108,53 @@ export default async function StoryPage(props: { params: { storieId: string } })
         </Card>
 
         {/* Reviews Card */}
-        <Card>
+        <Card className="w-full">
           <CardHeader>
-            <CardTitle>Stories</CardTitle>
+            <CardTitle>
+              <span role="img" aria-label="star" className="mr-2">⭐</span>
+              <span className="font-bold">Reviews</span>
+            </CardTitle>
           </CardHeader>
 
           <CardContent>
-            <div className="space-y-6">
-              <div key={story?._id} className="border-b pb-4">
-
-                {/* RATING */}
-                {(story.rating && story.rating > 0) ? (
-                  <div className="flex mt-1">
-                    {[...Array(story.rating)].map((_, i) => (
-                      <StarIcon
-                        key={i}
-                        className="w-5 h-5 fill-yellow-400 text-yellow-400"
-                      />
-                    ))}
+            <div className="space-y-4">
+              {(reviews.items ?? []).length === 0 ? (
+                <p>No reviews yet.</p>
+              ) : (
+                reviews.items.map((review) => (
+                  <div key={review?._id} className="border-b pb-4">
+                    <div className="flex justify-between items-center">
+                      <p className="font-semibold">{review?.name || 'Anonymous'}</p>
+                      <div className="flex">
+                        {Array.from({ length: Number(review?.rating) || 0 }).map((_, i) => (
+                          <StarIcon
+                            key={i}
+                            className="w-5 h-5 fill-yellow-400 text-yellow-400"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <p className="mt-2">{review?.review || ''}</p>
                   </div>
-                ) : (
-                  <div className="text-sm text-gray-400 italic mt-1">Rating is empty</div>
-                )}
-
-                {/* You may want to add other fields here, such as story content, author, etc. */}
-
-              </div>
+                ))
+              )}
             </div>
-            <PostReviewForm storyId= {story?._id } />
           </CardContent>
         </Card>
 
-      </div>  
-        {/* Placeholder for reviews * /}
-      <div className="max-w-2xl w-full mt-2">
-        <div className="flex items-center gap-3 bg-yellow-100 border-l-4 border-yellow-400 text-yellow-900 px-6 py-5 rounded shadow mb-3">
-          {/* Alert triangle icon (lucide-react or use an emoji if you want to avoid extra libs) */}
-          <AlertTriangle className="w-6 h-6 text-yellow-400" />
-          <div>
-            <span className="font-semibold">Reviews section</span> – <span className="italic">working in progress</span> <span role="img" aria-label="warning">⚠️</span>
-          </div>
-        </div>
+        {/* Post Review Form Card */}
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>
+              <span role="img" aria-label="pencil" className="mr-2">📝</span>
+              <span className="font-bold">Post Your Review</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <PostReviewForm storyId={story?._id} />
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 }
