@@ -9,10 +9,6 @@ Before running the project, create a `.env.local` file in the root of your proje
 **Description**  
 - `NEXT_PUBLIC_WIX_CLIENT_ID`: Wix client ID (safe for frontend use).
 
-> ⚠️ **Important:**  
-> Never commit your `.env.local` file or share secret keys publicly. Generate your client ID from the Wix Developer Console.
-
-
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
@@ -54,5 +50,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## 
 
 
-> **Built by [Shakthi](https://github.com/shakthishamruth) ✨ & [Pornima](https://github.com/pornima-e) 🌸.**
+> **Built by [Shakthi](https://github.com/shakthishamruth) ✨  &  [Pornima](https://github.com/pornima-e) 🌸.**
 
