@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 
 export default async function Home() {
-    if (!process.env.WIX_CLIENT_ID) {
+    if (!process.env.NEXT_PUBLIC_WIX_CLIENT_ID) {
         throw new Error("WIX_CLIENT_ID is not defined in your environment.");
     }
 
@@ -52,7 +52,7 @@ export default async function Home() {
                                         <>
                                             <br />
                                             <span className="text-xs text-gray-500">
-                                                 {new Date(story.publicationDate).toLocaleDateString(undefined, {
+                                                {new Date(story.publicationDate).toLocaleDateString(undefined, {
                                                     year: "numeric",
                                                     month: "long",
                                                     day: "numeric",

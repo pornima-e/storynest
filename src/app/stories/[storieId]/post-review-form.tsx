@@ -8,29 +8,30 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { getClient } from "../../lib/wix-client";
 
-
 export function PostReviewForm({ storyId }: { storyId: string }) {
-  const [name, setName] = useState("");
-  const [rating, setRating] = useState(5);
-  const [review, setReview] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [name, setName] = useState<string>("");
+  const [rating, setRating] = useState<number>(5);
+  const [review, setReview] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toast } = useToast();
 
-  // You can call a backend API route, or use an SDK/JS API as available
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
+
+    // EXACT field names as in your schema (all lowercase)
     const toInsert = {
-      Rating: rating,
-      Name: name,
-      Review: review,
-      StoryId: storyId,
+      rating: Number(rating),       // number
+      name: String(name),           // string
+      review: String(review),       // string
+      storyId: String(storyId),     // reference, must be _id (string)
     };
 
-    // Replace this with your actual client/SDK or API endpoint
     try {
       const item = await getClient().items.insert("REVIEWS", toInsert);
-      setName(""); setRating(5); setReview("");
+      setName("");
+      setRating(5);
+      setReview("");
       toast({
         title: "Your review has been posted",
         description: "Thank you for your feedback!",
@@ -40,7 +41,10 @@ export function PostReviewForm({ storyId }: { storyId: string }) {
       console.error("Insert error:", err);
       toast({
         title: "Error",
-        description: (err as Error).message || "Something went wrong",
+        description:
+          err instanceof Error && err.message
+            ? err.message
+            : "Something went wrong",
         variant: "destructive",
       });
     } finally {
@@ -57,7 +61,9 @@ export function PostReviewForm({ storyId }: { storyId: string }) {
         required
       />
       <div className="flex items-center space-x-2">
-        <label htmlFor="rating" className="text-sm font-medium">Rating:</label>
+        <label htmlFor="rating" className="text-sm font-medium">
+          Rating:
+        </label>
         <Input
           id="rating"
           type="number"
