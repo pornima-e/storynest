@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { getClient } from "../../lib/wix-client";
 
 export function PostReviewForm({ storyId }: { storyId: string }) {
@@ -13,40 +13,30 @@ export function PostReviewForm({ storyId }: { storyId: string }) {
   const [rating, setRating] = useState<number>(5);
   const [review, setReview] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { toast } = useToast();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
 
-    // EXACT field names as in your schema (all lowercase)
     const toInsert = {
-      rating: Number(rating),       // number
-      name: String(name),           // string
-      review: String(review),       // string
-      storyId: String(storyId),     // reference, must be _id (string)
+      rating: Number(rating),
+      name: String(name),
+      review: String(review),
+      storyId: String(storyId),
     };
 
     try {
-      const item = await getClient().items.insert("REVIEWS", toInsert);
+      await getClient().items.insert("REVIEWS", toInsert);
+      toast.success("Your review has been posted!", {
+        description: "Thank you for your feedback!",
+      });
+
       setName("");
       setRating(5);
       setReview("");
-      toast({
-        title: "Your review has been posted",
-        description: "Thank you for your feedback!",
-      });
-      console.log("Inserted review:", item);
     } catch (err) {
       console.error("Insert error:", err);
-      toast({
-        title: "Error",
-        description:
-          err instanceof Error && err.message
-            ? err.message
-            : "Something went wrong",
-        variant: "destructive",
-      });
+      toast.error("Error");
     } finally {
       setIsLoading(false);
     }

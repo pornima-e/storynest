@@ -1,8 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
 import client from "../../lib/wix";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { PostReviewForm } from "./post-review-form";
+import { HomeIcon, ReaderIcon } from "@radix-ui/react-icons";
 
 // --- Hash function ---
 function hashString(str: string): number {
@@ -23,7 +26,7 @@ function colorFromTitle(title: string): string {
 }
 
 export default async function Page({ params }: { params: { storieId: string } }) {
-  const { storieId } = await params;  // ✅ MUST await!
+  const { storieId } = await params;
   if (!storieId) return <div className="text-red-500">Missing story ID.</div>;
 
   const result = await client.items
@@ -40,8 +43,6 @@ export default async function Page({ params }: { params: { storieId: string } })
   const story = result.items[0];
   const bgColor = colorFromTitle(story.title || "default");
 
-  console.log("Rendering PostReviewForm with storyId:", story?._id);
-
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center px-4 py-10"
@@ -49,6 +50,28 @@ export default async function Page({ params }: { params: { storieId: string } })
         background: `linear-gradient(to bottom, ${bgColor}, #f3f4f6 85%)`
       }}
     >
+      {/* Home & Stories Button */}
+      <div className="w-full max-w-4xl pt-2 pb-4 flex gap-4">
+        <Link href="/" passHref>
+          <Button
+            variant="secondary"
+            className="flex items-center gap-2 bg-green-100 hover:bg-green-200 text-green-900 font-semibold shadow"
+          >
+            <HomeIcon className="w-5 h-5" />
+            Home
+          </Button>
+        </Link>
+        <Link href="/stories" passHref>
+          <Button
+            variant="secondary"
+            className="flex items-center gap-2 bg-blue-100 hover:bg-blue-200 text-blue-900 font-semibold shadow"
+          >
+            <ReaderIcon className="w-5 h-5" />
+            Stories
+          </Button>
+        </Link>
+      </div>
+
       {/* Wider Main Story Card */}
       <div className="max-w-4xl w-full bg-white shadow-2xl rounded-2xl overflow-hidden mb-10">
         <div className="flex flex-col md:flex-row">
