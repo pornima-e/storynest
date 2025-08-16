@@ -16,14 +16,19 @@ import { redirect } from 'next/navigation';
 export default async function Home({
     searchParams,
 }: {
-    searchParams: { search?: string };
+    searchParams: { search?: string } | Promise<{ search?: string }>;
 }) {
 
     if (!process.env.NEXT_PUBLIC_WIX_CLIENT_ID) {
         throw new Error("WIX_CLIENT_ID is not defined in your environment.");
     }
 
-    const result = await client.items.query("Stories").startsWith("title", searchParams.search ?? "").find();
+    const resolvedParams = await searchParams;
+
+    const result = await client.items
+        .query("Stories")
+        .startsWith("title", resolvedParams.search ?? "")
+        .find();
     const stories = result.items;
 
     return (
