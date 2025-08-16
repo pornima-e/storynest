@@ -10,6 +10,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export default async function Home() {
     if (!process.env.NEXT_PUBLIC_WIX_CLIENT_ID) {
@@ -21,9 +22,23 @@ export default async function Home() {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-green-50 to-sky-100 px-4 py-8 flex flex-col items-center">
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-center mb-10 text-green-900 tracking-tight">
-                🌱 Stories
-            </h1>
+
+            <div className="flex justify-evenly items-center w-full">
+                <h1 className="text-3xl sm:text-4xl font-extrabold text-green-900 tracking-tight">
+                    🌱 Stories
+                </h1>
+
+                <form className="flex gap-2">
+                    <Input type="text" placeholder="Search Stories" />
+                    <Button type="submit">Search</Button>
+                </form>
+
+                <Button size="lg" className="bg-sky-700 hover:bg-sky-900 rounded-xl shadow-lg">
+                    Add Stories
+                </Button>
+            </div>
+
+
             <div className="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                 {stories.map((story: any) => (
                     <Card
@@ -78,9 +93,7 @@ export default async function Home() {
                     </Card>
                 ))}
             </div>
-            <Button size="lg" className="bg-sky-700 hover:bg-sky-900 rounded-xl shadow-lg mb-8">
-                Add Stories
-            </Button>
+
         </div>
     );
 }
