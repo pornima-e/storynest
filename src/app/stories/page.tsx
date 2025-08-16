@@ -23,7 +23,7 @@ export default async function Home() {
     return (
         <div className="min-h-screen bg-gradient-to-b from-green-50 to-sky-100 px-4 py-8 flex flex-col items-center">
 
-            <div className="flex justify-evenly items-center w-full">
+            <div className="flex justify-evenly items-center w-full mb-4 sm:mb-6 lg:mb-10">
                 <h1 className="text-3xl sm:text-4xl font-extrabold text-green-900 tracking-tight">
                     🌱 Stories
                 </h1>
