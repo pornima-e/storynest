@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { redirect } from 'next/navigation';
+import { AddStoryDialog } from "./add-story-dialog";
+
 
 export default async function Home({
     searchParams,
@@ -50,9 +52,7 @@ export default async function Home({
                     <Button type="submit">Search</Button>
                 </form>
 
-                <Button size="lg" className="bg-sky-700 hover:bg-sky-900 rounded-xl shadow-lg">
-                    Add Stories
-                </Button>
+                <AddStoryDialog />
             </div>
 
             <div className="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
