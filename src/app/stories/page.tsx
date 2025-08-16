@@ -11,13 +11,19 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { redirect } from 'next/navigation';
 
-export default async function Home() {
+export default async function Home({
+    searchParams,
+}: {
+    searchParams: { search?: string };
+}) {
+
     if (!process.env.NEXT_PUBLIC_WIX_CLIENT_ID) {
         throw new Error("WIX_CLIENT_ID is not defined in your environment.");
     }
 
-    const result = await client.items.query("Stories").find();
+    const result = await client.items.query("Stories").startsWith("title", searchParams.search ?? "").find();
     const stories = result.items;
 
     return (
@@ -28,8 +34,14 @@ export default async function Home() {
                     🌱 Stories
                 </h1>
 
-                <form className="flex gap-2">
-                    <Input type="text" placeholder="Search Stories" />
+                <form action={async (formData) => {
+                    "use server";
+
+                    const search = formData.get('search');
+                    redirect(`/stories?search=${search}`);
+
+                }} className="flex gap-2">
+                    <Input name="search" type="text" placeholder="Search Stories" />
                     <Button type="submit">Search</Button>
                 </form>
 
@@ -38,15 +50,25 @@ export default async function Home() {
                 </Button>
             </div>
 
-
             <div className="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                {stories.length === 0 && (
+                    <div className="col-span-full border p-12 flex flex-col gap-4 items-center justify-center">
+                        <Image
+                            width={200}
+                            height={200}
+                            src={"/no_data.svg"}
+                            alt={"story not found icon"}
+                        />
+                        <p className="text-center">No Stories found</p>
+                    </div>
+                )}
+
                 {stories.map((story: any) => (
                     <Card
                         key={story._id}
                         className="flex flex-col h-full overflow-hidden shadow-xl border border-green-100 hover:shadow-2xl hover:-translate-y-1 transition-transform duration-300 bg-white"
                     >
                         <CardHeader className="p-0">
-                            {/* COVER IMAGE – if available */}
                             {story.coverImage && (
                                 <div className="w-full h-52 relative">
                                     <Image
