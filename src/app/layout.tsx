@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "🌱 Story Nest",
+  title: "Story Nest",
   description: "A place to find and review stories",
 };
 
