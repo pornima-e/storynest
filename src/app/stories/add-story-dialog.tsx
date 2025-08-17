@@ -14,11 +14,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { getClient } from "../lib/wix-client";
-
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export function AddStoryDialog() {
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
 
     return (
         <Dialog>
@@ -36,8 +37,10 @@ export function AddStoryDialog() {
                 <form
                     onSubmit={async (e) => {
                         e.preventDefault();
+                        setLoading(true);
                         const formData = new FormData(e.target as HTMLFormElement);
-                        let coverImage = formData.get("picture");
+                        // let coverImage = formData.get("picture");
+                        let coverImage = "https://static.wixstatic.com/media/023ca4_3c0d5960edb3436ca6d64880259b40c7~mv2.jpg";
                         const title = formData.get("title");
                         const author = formData.get("author");
                         const description = formData.get("description");
@@ -49,11 +52,15 @@ export function AddStoryDialog() {
                             day: "numeric",
                         });
 
+                        /*
+
                         // Set default coverImage URL if none provided
                         if (!coverImage || (coverImage instanceof File && coverImage.size === 0)) {
                             // Replace with your desired default image URL
                             coverImage = "https://static.wixstatic.com/media/023ca4_3c0d5960edb3436ca6d64880259b40c7~mv2.jpg";
                         }
+                        
+                        */
 
                         const toInsert = {
                             coverImage,
@@ -69,6 +76,7 @@ export function AddStoryDialog() {
 
                         router.push(`/stories/${response._id}`);
                     }}
+
                     className="flex flex-col gap-4"
                 >
                     <div className="grid w-full items-center gap-1.5">
@@ -83,7 +91,7 @@ export function AddStoryDialog() {
 
                     <div className="grid w-full items-center gap-1.5">
                         <Label htmlFor="picture">Picture</Label>
-                        <Input name="picture" id="picture" type="file" />
+                        <Input name="picture" id="picture" type="file" disabled />
                     </div>
 
                     <div className="grid w-full items-center gap-1.5">
@@ -101,9 +109,10 @@ export function AddStoryDialog() {
                         <Textarea name="content" id="content" placeholder="Enter content" />
                     </div>
 
-                    <Button type="submit">Add Story</Button>
+                    <Button type="submit" disabled={loading}>
+                        {loading ? "Adding..." : "Add Story"}
+                    </Button>
                 </form>
-
 
             </DialogContent>
         </Dialog>

@@ -1,6 +1,18 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@keyframes gradient-move {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.animated-gradient {
+  background: linear-gradient(90deg, #f7fafc, #e3f9e5, #d1fae5, #e3f9e5, #f7fafc);
+  background-size: 200% 200%;
+  animation: gradient-move 16s ease-in-out infinite;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -116,6 +128,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
