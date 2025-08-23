@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import client from "../../lib/wix";
+import { getServerClient } from "../../lib/wix";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StarIcon } from "@heroicons/react/24/solid";
@@ -29,13 +29,13 @@ export default async function Page({ params }: { params: { storieId: string } })
   const { storieId } = await params;
   if (!storieId) return <div className="text-red-500">Missing story ID.</div>;
 
-  const result = await client.items
+  const result = await (await getServerClient()).items
     .query("Stories")
     .eq("_id", storieId)
     .find();
   if (!result.items?.length) return <div className="text-gray-500">Story not found.</div>;
 
-  const reviews = await client.items
+  const reviews = await (await getServerClient()).items
     .query("REVIEWS")
     .eq("storyId", storieId)
     .find();

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import client from "../lib/wix";
+import {getServerClient} from "../lib/wix";
 import {
     Card,
     CardContent,
@@ -42,7 +42,7 @@ export default async function Home({
         throw new Error("WIX_CLIENT_ID is not defined in your environment.");
     }
     const resolvedParams = await searchParams;
-    const result = await client.items
+    const result = await (await getServerClient()).items
         .query("Stories")
         .startsWith("title", resolvedParams.search ?? "")
         .find();
