@@ -4,12 +4,13 @@ import Link from "next/link";
 import './globals.css';
 import { loginAction, logoutAction } from "./actions";
 import { getClient } from "./lib/wix-client";
-import { getServerClient } from "./lib/wix";
+import { getMember, getServerClient } from "./lib/wix";
 
 export async function Header() {
     const client = await getClient(); // Await if async
     const serverClient = await getServerClient();
     const isLoggedIn = await serverClient.auth.loggedIn();
+    const member = await getMember();
 
     console.log(isLoggedIn);
 
@@ -34,6 +35,7 @@ export async function Header() {
                     <div>
                         {isLoggedIn ? (
                             <div className="flex items-center gap-2">
+                                <p className="text-sm">Hello, {member?.nickname}</p>
                                 <form action={logoutAction}>
                                     <Button variant="outline">Logout</Button>
                                 </form>
