@@ -11,7 +11,6 @@ export async function Header() {
     const serverClient = await getServerClient();
     const isLoggedIn = await serverClient.auth.loggedIn();
     const member = await getMember();
-
     console.log(isLoggedIn);
 
     return (
@@ -32,6 +31,15 @@ export async function Header() {
                             🌱 Browse Stories
                         </Link>
                     </Button>
+
+                    <div>
+                        {isLoggedIn && (
+                            <Button asChild variant="link" className="text-green-800">
+                                <Link href="/reviews">View Reviews</Link>
+                            </Button>
+                        )}
+                    </div>
+
                     <div>
                         {isLoggedIn ? (
                             <div className="flex items-center gap-2">
