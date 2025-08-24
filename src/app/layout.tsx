@@ -1,16 +1,26 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Birthstone, Lavishly_Yours } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
 
+// Font config
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
-
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+const birthstone = Birthstone({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-birthstone",
+});
+const lavishlyYours = Lavishly_Yours({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-lavishly-yours",
 });
 
 export const metadata: Metadata = {
@@ -29,7 +39,13 @@ export default function RootLayout({
         <link rel="icon" href="/story.png" type="image/png" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`
+          ${geistSans.variable}
+          ${geistMono.variable}
+          ${birthstone.variable}
+          ${lavishlyYours.variable}
+          antialiased
+        `}
       >
         {children}
         <Toaster richColors />

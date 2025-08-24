@@ -13,6 +13,18 @@
   animation: gradient-move 16s ease-in-out infinite;
 }
 
+.birthstone-regular {
+  font-family: var(--font-birthstone), cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.lavishly-yours-regular {
+  font-family: var(--font-lavishly-yours), cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

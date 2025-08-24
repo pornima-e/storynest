@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,6 +13,24 @@ export function PostReviewForm({ storyId }: { storyId: string }) {
   const [rating, setRating] = useState<number>(5);
   const [review, setReview] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // Fetch logged-in member nickname from API route and set as default name
+  useEffect(() => {
+    async function fetchMemberName() {
+      try {
+        const res = await fetch("/api/member");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.member?.nickname) {
+            setName(data.member.nickname);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch member info", err);
+      }
+    }
+    fetchMemberName();
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -31,12 +49,15 @@ export function PostReviewForm({ storyId }: { storyId: string }) {
         description: "Thank you for your feedback!",
       });
 
-      setName("");
       setRating(5);
       setReview("");
+      // Optional: keep name if desired, or clear if you want
+      // setName("");
     } catch (err) {
       console.error("Insert error:", err);
-      toast.error("Error");
+      toast.error("Error posting review!", {
+        description: "Please check if you are logged in.",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -44,11 +65,15 @@ export function PostReviewForm({ storyId }: { storyId: string }) {
 
   return (
     <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+      <label htmlFor="rating" className="text-sm font-medium">
+        Your Name:
+      </label>
       <Input
         placeholder="Your name"
         value={name}
         onChange={e => setName(e.target.value)}
         required
+        disabled
       />
       <div className="flex items-center space-x-2">
         <label htmlFor="rating" className="text-sm font-medium">
@@ -57,8 +82,8 @@ export function PostReviewForm({ storyId }: { storyId: string }) {
         <Input
           id="rating"
           type="number"
-          min="1"
-          max="5"
+          min={1}
+          max={5}
           value={rating}
           onChange={e => setRating(parseInt(e.target.value))}
           required

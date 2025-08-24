@@ -21,7 +21,9 @@ export async function Header() {
                         className="text-3xl flex items-center gap-2 font-[family-name:var(--font-dancing-script)] text-green-800"
                     >
                         <Image src="/story.png" width={32} height={32} alt="StoryNest" />
-                        StoryNest
+                        <span className="birthstone-regular text-green-800 text-4xl font-bold">
+                            StoryNest
+                        </span>
                     </Link>
                 </Button>
                 <div className="flex items-center gap-6">

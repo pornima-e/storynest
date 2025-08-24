@@ -7,8 +7,8 @@ export default function Home() {
       <Header />
       <div className="font-sans flex flex-col justify-center items-center min-h-screen p-8 pb-20 gap-12 sm:p-20 bg-gradient-to-b from-green-50 to-green-100">
         <main className="flex flex-col gap-8 items-center sm:items-start w-full max-w-2xl">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-green-900 tracking-tight text-center sm:text-left mb-2">
-            STORYNEST
+          <h1 className="birthstone-regular text-5xl sm:text-6xl font-extrabold text-green-900 tracking-tight text-center sm:text-left mb-2">
+            StoryNest
           </h1>
           <p className="text-lg text-gray-700 max-w-xl text-center sm:text-left">
             Discover, read and review stories. Explore all authors. Use the links below to get started.
@@ -24,7 +24,7 @@ export default function Home() {
               href="/author"
               className="rounded-full border border-green-600 text-green-700 bg-white font-medium text-lg px-6 py-3 transition hover:bg-green-50 hover:border-green-800 shadow"
             >
-              🧑‍💻 Meet the Authors
+              🧑‍💻 Meet the Creators
             </Link>
           </div>
         </main>
