@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getMember } from "@/app/lib/wix"; // your existing server-only wix.ts
+import { getMember } from "@/app/lib/wix";
 
 export async function GET() {
     try {

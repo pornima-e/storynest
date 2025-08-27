@@ -7,7 +7,6 @@ import { getClient } from "./lib/wix-client";
 import { getMember, getServerClient } from "./lib/wix";
 
 export async function Header() {
-    const client = await getClient(); // Await if async
     const serverClient = await getServerClient();
     const isLoggedIn = await serverClient.auth.loggedIn();
     const member = await getMember();
