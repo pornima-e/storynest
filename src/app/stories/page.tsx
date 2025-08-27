@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { redirect } from "next/navigation";
 import { AddStoryDialog } from "./add-story-dialog";
 import { Header } from "../header";
+import { SearchIcon } from "lucide-react";
 
 // Hash function to generate unique HSL color hue from title
 function hashString(str: string) {
@@ -60,9 +61,9 @@ export default async function Home({
         <>
             <Header />
             <div className="min-h-screen bg-gradient-to-b from-green-50 to-sky-100 px-4 py-8 flex flex-col items-center">
-                <div className="flex justify-evenly items-center w-full mb-4 sm:mb-6 lg:mb-10">
+                <div className="flex gap-2 justify-between items-center w-full mb-4 sm:mb-6 lg:mb-10">
                     <h1 className="text-3xl sm:text-4xl font-extrabold text-green-900 tracking-tight">
-                        🌱 Stories
+                        Stories
                     </h1>
                     <form
                         action={async (formData) => {
@@ -77,8 +78,9 @@ export default async function Home({
                             type="submit"
                             variant="outline"
                             className="text-green-600 border-green-600 hover:bg-green-600 hover:text-white"
+                            size="icon"
                         >
-                            Search
+                            <SearchIcon />
                         </Button>
                     </form>
                     <AddStoryDialog />
