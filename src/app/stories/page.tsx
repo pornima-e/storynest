@@ -47,7 +47,6 @@ export default async function Home({
         .startsWith("title", resolvedParams.search ?? "")
         .find();
     const stories = result.items;
-    console.log(stories);
     return (
         <>
             <Header />

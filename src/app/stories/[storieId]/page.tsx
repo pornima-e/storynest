@@ -124,7 +124,7 @@ export default async function Page({ params }: { params: { storieId: string } })
         <Card className="w-full">
           <CardHeader>
             <CardTitle>
-              <span role="img" aria-label="book" className="mr-2">📖</span>
+              <span role="img" aria-label="story" className="mr-2">📖</span>
               <span className="font-bold">Story Details</span>
             </CardTitle>
           </CardHeader>
