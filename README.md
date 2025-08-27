@@ -8,6 +8,7 @@ Before running the project, create a `.env.local` file in the root of your proje
 
 **Description**  
 - `NEXT_PUBLIC_WIX_CLIENT_ID`: Wix client ID (safe for frontend use).
+- `NEXT_PUBLIC_URL=http://localhost:3000`: Give ur domain URL.
 
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
