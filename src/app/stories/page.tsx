@@ -46,7 +46,7 @@ interface Story {
 export default async function Home({
     searchParams,
 }: {
-    searchParams:  Promise<{ search?: string }>;
+    searchParams: Promise<{ search?: string }>;
 }) {
     if (!process.env.NEXT_PUBLIC_WIX_CLIENT_ID) {
         throw new Error("WIX_CLIENT_ID is not defined in your environment.");
@@ -61,7 +61,7 @@ export default async function Home({
         <>
             <Header />
             <div className="min-h-screen bg-gradient-to-b from-green-50 to-sky-100 px-4 py-8 flex flex-col items-center">
-                <div className="flex gap-2 justify-between items-center w-full mb-4 sm:mb-6 lg:mb-10">
+                <div className="flex gap-2 justify-around items-center w-full mb-4 sm:mb-6 lg:mb-10">
                     <h1 className="text-3xl sm:text-4xl font-extrabold text-green-900 tracking-tight">
                         Stories
                     </h1>
