@@ -43,14 +43,14 @@ export function AddStoryDialog() {
                         setLoading(true);
                         try {
                             const formData = new FormData(e.target as HTMLFormElement);
-                            let coverImage =
+                            const coverImage =
                                 "https://static.wixstatic.com/media/023ca4_3c0d5960edb3436ca6d64880259b40c7~mv2.jpg";
                             const title = formData.get("title");
                             const author = formData.get("author");
                             const description = formData.get("description");
                             const url = formData.get("url");
                             const content = formData.get("content");
-                            let publicationDate = new Date().toLocaleDateString(undefined, {
+                            const publicationDate = new Date().toLocaleDateString(undefined, {
                                 year: "numeric",
                                 month: "short",
                                 day: "numeric",
@@ -69,7 +69,7 @@ export function AddStoryDialog() {
                             const response = await getClient().items.insert("Stories", toInsert);
                             router.push(`/stories/${response._id}`);
                             toast.success("Story added successfully!");
-                        } catch (error) {
+                        } catch {
                             toast.error("Failed to add story!", {
                                 description: "Please check if you are logged in.",
                             });

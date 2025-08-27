@@ -1,5 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
-import {getServerClient} from "../lib/wix";
+import { getServerClient } from "../lib/wix";
 import {
     Card,
     CardContent,
@@ -33,6 +34,14 @@ function gradientFromTitle(title: string) {
     return `linear-gradient(to bottom, hsl(${hue}, ${saturation}%, ${lightness}%), #f3f4f6 85%)`;
 }
 
+interface Story {
+    _id: string;
+    title?: string;
+    author?: string;
+    publicationDate?: string;
+    description?: string;
+}
+
 export default async function Home({
     searchParams,
 }: {
@@ -46,7 +55,7 @@ export default async function Home({
         .query("Stories")
         .startsWith("title", resolvedParams.search ?? "")
         .find();
-    const stories = result.items;
+    const stories: Story[] = result.items;
     return (
         <>
             <Header />
@@ -77,7 +86,7 @@ export default async function Home({
                 <div className="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                     {stories.length === 0 && (
                         <div className="col-span-full border p-12 flex flex-col gap-4 items-center justify-center">
-                            <img
+                            <Image
                                 width={200}
                                 height={200}
                                 src={"/no_data.svg"}
@@ -86,7 +95,7 @@ export default async function Home({
                             <p className="text-center">No Stories found</p>
                         </div>
                     )}
-                    {stories.map((story: any) => {
+                    {stories.map((story) => {
                         const bgGradient = story.title ? gradientFromTitle(story.title) : "#fff";
                         return (
                             <Card

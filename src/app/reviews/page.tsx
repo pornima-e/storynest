@@ -10,7 +10,7 @@ import { Header } from "../header";
 interface Story {
     _id: string;
     title?: string;
-    [key: string]: any;
+    [key: string]: unknown; //
 }
 
 export default async function ReviewsPage() {
