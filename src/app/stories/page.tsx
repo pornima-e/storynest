@@ -45,7 +45,7 @@ interface Story {
 export default async function Home({
     searchParams,
 }: {
-    searchParams: { search?: string } | Promise<{ search?: string }>;
+    searchParams:  Promise<{ search?: string }>;
 }) {
     if (!process.env.NEXT_PUBLIC_WIX_CLIENT_ID) {
         throw new Error("WIX_CLIENT_ID is not defined in your environment.");

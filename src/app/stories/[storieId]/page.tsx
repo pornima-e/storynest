@@ -44,13 +44,13 @@ interface Review {
 }
 
 interface PageProps {
-  params: {
+  params: Promise<{
     storieId: string;
-  };
+  }>;
 }
 
 export default async function Page({ params }: PageProps) {
-  const { storieId } = params;
+  const { storieId } = await params;
   if (!storieId) return <div className="text-red-500">Missing story ID.</div>;
 
   const client = await getServerClient();
