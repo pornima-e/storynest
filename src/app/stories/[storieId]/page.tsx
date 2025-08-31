@@ -148,11 +148,11 @@ export default async function Page({ params }: PageProps) {
               <span role="img" aria-label="story" className="mr-2">
                 📖
               </span>
-              <span className="font-bold">Story Details</span>
+              <span className="font-bold"> Content </span>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="mt-2 text-sm text-gray-700 line-clamp-3">
+            <p className="mt-2 text-sm text-gray-700">
               {story.content && story.content.trim().length > 0 ? (
                 story.content
               ) : (
