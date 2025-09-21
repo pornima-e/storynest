@@ -41,6 +41,7 @@ interface Story {
     author?: string;
     publicationDate?: string;
     description?: string;
+    coverImage?: string;
 }
 
 export default async function Home({
@@ -57,6 +58,7 @@ export default async function Home({
         .startsWith("title", resolvedParams.search ?? "")
         .find();
     const stories: Story[] = result.items;
+
     return (
         <>
             <Header />
@@ -103,18 +105,30 @@ export default async function Home({
                             <Card
                                 key={story._id}
                                 style={{ background: bgGradient }}
-                                className="flex flex-col h-full overflow-hidden shadow-xl border border-green-100 hover:shadow-2xl hover:-translate-y-1 transition-transform duration-300"
+                                className="flex flex-col h-full overflow-hidden rounded-lg shadow-lg border border-green-200 hover:shadow-2xl hover:-translate-y-1 transition-transform duration-300 py-0"
                             >
-                                <CardHeader className="p-4">
-                                    <CardTitle className="text-xl font-semibold">
+                                {story.coverImage && (
+                                    <div className="relative h-56 w-full rounded-t-lg overflow-hidden shadow-md">
+                                        <Image
+                                            src={story.coverImage}
+                                            alt={story.title ?? "Story cover image"}
+                                            fill
+                                            className="object-cover"
+                                            priority={false}
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30 rounded-t-lg pointer-events-none" />
+                                    </div>
+                                )}
+                                <CardHeader className="px-6 pt-5 pb-2">
+                                    <CardTitle className="text-2xl font-bold text-green-900">
                                         {story.title ?? "Untitled"}
                                     </CardTitle>
-                                    <CardDescription className="mt-1 text-sm">
+                                    <CardDescription className="mt-1 text-sm text-green-700">
                                         {story.author ? `By ${story.author}` : "Unknown Author"}
                                         {story.publicationDate && (
                                             <>
                                                 <br />
-                                                <span className="text-xs text-gray-500">
+                                                <time className="text-xs text-green-600 font-medium">
                                                     {new Date(story.publicationDate).toLocaleDateString(
                                                         undefined,
                                                         {
@@ -123,25 +137,25 @@ export default async function Home({
                                                             day: "numeric",
                                                         }
                                                     )}
-                                                </span>
+                                                </time>
                                             </>
                                         )}
                                     </CardDescription>
                                 </CardHeader>
-                                <CardContent className="grow px-4 pb-2">
-                                    <p className="text-base text-gray-700 line-clamp-4">
-                                        {story.description && story.description.length > 120
-                                            ? story.description.slice(0, 120) + "…"
+                                <CardContent className="grow px-6 pb-4">
+                                    <p className="text-gray-800 line-clamp-5 leading-relaxed">
+                                        {story.description && story.description.length > 150
+                                            ? story.description.slice(0, 150) + "…"
                                             : story.description ?? "No description."}
                                     </p>
                                 </CardContent>
-                                <CardFooter className="px-4 pb-4 pt-2 mt-auto">
+                                <CardFooter className="px-6 pb-6 pt-3 mt-auto">
                                     <Button
                                         asChild
                                         size="lg"
-                                        className="w-full bg-transparent text-green-600 border border-green-600 hover:bg-green-600 hover:text-white"
+                                        className="w-full bg-green-600 text-white hover:bg-green-700"
                                     >
-                                        <Link href={`/stories/${story._id}`}>Read</Link>
+                                        <Link href={`/stories/${story._id}`}>Read Story</Link>
                                     </Button>
                                 </CardFooter>
                             </Card>

@@ -12,20 +12,32 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { getClient } from "../lib/wix-client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useRef } from "react";
 import { toast } from "sonner";
 
 export function AddStoryDialog() {
-    const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
+    const formRef = useRef<HTMLFormElement>(null);
+
+    const handleOpenChange = (isOpen: boolean) => {
+        setOpen(isOpen);
+        if (!isOpen) {
+            setLoading(false);
+            // Reset form fields on dialog close
+            if (formRef.current) {
+                formRef.current.reset();
+            }
+        }
+    };
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
                 <Button
                     variant="outline"
                     className="text-green-600 border-green-600 hover:bg-green-600 hover:text-white"
+                    onClick={() => setOpen(true)}
                 >
                     Add Story
                 </Button>
@@ -37,7 +49,12 @@ export function AddStoryDialog() {
                         Show your creation and add your stories!
                     </DialogDescription>
                 </DialogHeader>
+                <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-2 text-sm text-yellow-800 rounded">
+                    <strong>NOTE:</strong> Your story will be visible on StoryNest only after it has been approved by the admins.
+                    Please wait until the process is completed.
+                </div>
                 <form
+                    ref={formRef}
                     onSubmit={async (e) => {
                         e.preventDefault();
                         setLoading(true);
@@ -66,8 +83,9 @@ export function AddStoryDialog() {
                                 publicationDate,
                             };
 
-                            const response = await getClient().items.insert("Stories", toInsert);
-                            router.push(`/stories/${response._id}`);
+                            await getClient().items.insert("Stories", toInsert);
+                            setOpen(false);
+                            setLoading(false);
                             toast.success("Story added successfully!");
                         } catch {
                             toast.error("Failed to add story!", {
@@ -100,7 +118,7 @@ export function AddStoryDialog() {
                     </div>
                     <div className="grid w-full items-center gap-1.5">
                         <Label htmlFor="content">Content</Label>
-                        <Textarea name="content" id="content" placeholder="Enter content" />
+                        <Textarea name="content" id="content" required placeholder="Enter content" />
                     </div>
                     <Button
                         type="submit"
